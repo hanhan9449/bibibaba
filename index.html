@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title> 给傻妹妹 </title>
+    <style>
+        .inner {
+            /*display: flex;*/
+            /*align-items: center;*/
+            /*justify-content: center;*/
+            white-space: pre;
+            font-family: monospace;
+        }
+        .outer {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<section class="outer">
+    <section class="inner" id="x"></section>
+            <span>咱就是说，哥哥爱你🧡</span>
+</section>
+<script>
+    const xEl = document.querySelector('#x')
+    function sleep(ms) {
+        let now = Date.now()
+        while (now + ms > Date.now()) {}
+    }
+    function randomColor() {
+
+        return '#'+((~~(0xffffff*Math.random())).toString(16) +'00000').slice(0,6)
+    }
+    function print(str) {
+        let el = document.createElement('div')
+        el.innerText = str
+        el.style.color = randomColor()
+        setInterval(() => {
+
+        el.style.color = randomColor()
+        }, 200)
+        xEl.appendChild(el)
+    }
+    let arr = []
+    let queue = []
+    function putchar(c) {
+        if (c === '\n') {
+            // console.log(arr.join(''))
+            // print(arr.join(''))
+            queue.push(arr.join(''))
+            arr = []
+        } else {
+            arr.push(c)
+        }
+    }
+
+    function f( x,  y,  z) {
+        let a = x * x + 9.0 / 4.0 * y * y + z * z - 1;
+        return a * a * a - x * x * z * z * z - 9.0 / 80.0 * y * y * z * z * z;
+    }
+
+    function h( x,  z) {
+        for (let y = 1.0; y >= 0.0; y -= 0.001)
+            if (f(x, y, z) <= 0.0)
+                return y;
+        return 0.0;
+    }
+
+    function main() {
+        for (let z = 1.5; z > -1.5; z -= 0.05) {
+            for (let x = -1.5; x < 1.5; x += 0.025) {
+                let v = f(x, 0.0, z);
+                if (v <= 0.0) {
+                    let y0 = h(x, z);
+                    let ny = 0.01;
+                    let nx = h(x + ny, z) - y0;
+                    let nz = h(x, z + ny) - y0;
+                    let nd = 1.0 / Math.sqrt(nx * nx + ny * ny + nz * nz);
+                    let d = (nx + ny - nz) * nd * 0.5 + 0.5;
+                    putchar(".:-=+*#%@".split('')[~~(d * 5.0)]);
+                }
+                else
+                    putchar(' ');
+            }
+            putchar('\n');
+        }
+        setInterval(() => {
+            if (queue.length) {
+                print(queue.shift())
+            }
+        }, 20)
+    }
+    main()
+</script>
+</body>
+</html>
+
